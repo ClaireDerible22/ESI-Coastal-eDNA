@@ -24,15 +24,6 @@ filter_low_reads <- function(asv_data) {
 #at this point, I can't actually see the new filtered data, I am going to try and save the function as a new dataset
 filtered_asv_data <- filter_low_reads(asv_data)
 
-##ESI
-### ---Merging data---
-#ASV
-esi12s<-read.table(file = "data/2021Data/NEW/12S/ESI2021_12S_feature_table_export.tsv", header = T, sep = "\t")
-#taxonomy
-esi12s.taxa <-read.table(file = "data/2021Data/NEW/12S/ESI_12Sblast_1results.tsv",header = F,sep="\t")
-colnames(esi12s.taxa)<-c("ASV","NCBI","percentID", "evalue","length","species","group","commonname")
-
-esi21.12s.merge <- left_join(esi12s, esi12s.taxa, by =c("OTU.ID"="ASV"))  %>% filter(group %in% c("bony fishes","whales & dolphins", "sharks & rays", "birds"), percentID > 90)
 ##ESI COI seining data
 
 
