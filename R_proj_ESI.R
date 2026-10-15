@@ -5,7 +5,7 @@ asv_data <- read.delim("C:/Users/clair/Documents/GitHub/ESI-Coastal-eDNA/data/20
 taxrdp <- read.delim("C:/Users/clair/Documents/GitHub/ESI-Coastal-eDNA/data/2023/COI-LERAYXT/rdp.output")
 #testing to see if R project is syncing with GitHub by hitting save and then checking desktop GitHub
 
-###Now we can begin
+###Now we can begin (Working with 2023 ESI Seining COI data)
 # Load libraries ----------------------------------------------------------
 
 library(dplyr)
@@ -49,3 +49,7 @@ esi23.coi.filt2 <- filter_low_reads(esi23.coi.filt) %>% filter(!Species %in% c("
 
 write.csv(x = esi23.coi.filt2, file = "C:/Users/clair/Documents/GitHub/ESI-coastal-eDNA/data/2023/COI-LERAYXT/ESI2023_Coastal_COI_GOTeDNA.csv", quote = F, row.names = F)
 
+
+### Filtering and Merging 2023 ESI 12S data 
+
+#Imported both datasets required (ASV and taxonomy)
