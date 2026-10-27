@@ -50,7 +50,22 @@ esi23.coi.filt2 <- filter_low_reads(esi23.coi.filt) %>% filter(!Species %in% c("
 write.csv(x = esi23.coi.filt2, file = "C:/Users/clair/Documents/GitHub/ESI-coastal-eDNA/data/2023/COI-LERAYXT/ESI2023_Coastal_COI_GOTeDNA.csv", quote = F, row.names = F)
 
 
-### Filtering and Merging 2023 ESI 12S data 
+#####Filtering and Merging 2023 ESI 12S data################################################################
 
-#Imported both datasets required (ASV and taxonomy)
+#Imported both data sets required (ASV and taxonomy)
+
+##We're going to skip the filtering by low reads step for now...
+
+###Trying to read in (and rename for R use) 12S Taxonomy and ASV files ##Header = false so that first data column isn't deleted (sep=, is used for csv to keep variables from merging into one)
+esi23.12S.asv <- read.csv("data/2023/12S/Seining_ASV_TaxonTable_Filtered_FishOnly.csv", header = T, sep=",")
+esi23.12S.taxa<- read.delim("data/2023/12S/seining23_blast.tsv", header = F)
+
+
+###MERGE###
+
+esi23.12S.merge <-left_join(esi23.12S.asv,esi23.12S.taxa, by=c("ID"="V1"))
+
+###filter 12S for fish, dolphin, whales, sharks
+
+esi23.12S.filt.merge <- esi23.12S.merge %>% filter(PercentID>97.99 & V7>97.99 %in% c("bony fishes","whales & dolphins","sharks & rays"))
 
