@@ -121,6 +121,10 @@ esi <-read_sf("data/mapping_shapefiles/NS_coastline_project_Erase1.shp")%>%
 
 #perley.sites <-read.csv("~/GitHub/easternshoreislands_aoi/data/SamplingDesign_65by20km.csv", header = T) %>% glimpse()
 
+##this is to rename a specific cell (TaylorHead to Taylor Head)
+cleaned_sites$Site[5] <- "Taylor Head"
+
+
 focal_bound <- esi%>%
   st_bbox()%>%
   st_as_sfc()%>%
@@ -136,8 +140,8 @@ ggplot()+
   xlab(label = "Longitude")+
   ylab(label="Latitude")+
   geom_point(data=cleaned_sites, aes(x=Long, y=Lat, color=Site, shape=Site), size=4)+
-  scale_color_manual(name="Site",values = c("Moosehead"="blue4", "Conrod Beach"="yellow", "Goldboro"="green", "Little Harbour"="blue3", "TaylorHead"="blue"))+
-  scale_shape_manual(name="Site", values= c("Moosehead"=15, "Conrod Beach"=16, "Goldboro"=16, "Little Harbour"=17, "TaylorHead"=18))+
+  scale_color_manual(name="Site",values = c("Moosehead"="blue3", "Conrod Beach"="green3", "Goldboro"="green3", "Little Harbour"="blue3", "Taylor Head"="blue3"))+
+  scale_shape_manual(name="Site", values= c("Moosehead"=20, "Conrod Beach"=17, "Goldboro"=16, "Little Harbour"=20, "Taylor Head"=20))+
   #geom_point(data=perley.sites, aes(x=lon, y=lat), shape=21, colour='black', fill="cornflowerblue", size=4)+
   theme_bw()+
   theme(axis.text.y = element_text(colour = "black", size = 14, face = "bold"), 
