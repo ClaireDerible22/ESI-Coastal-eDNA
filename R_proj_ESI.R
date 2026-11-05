@@ -140,8 +140,8 @@ ggplot()+
   xlab(label = "Longitude")+
   ylab(label="Latitude")+
   geom_point(data=cleaned_sites, aes(x=Long, y=Lat, color=Site, shape=Site), size=4)+
-  scale_color_manual(name="Site",values = c("Moosehead"="blue3", "Conrod Beach"="green3", "Goldboro"="green3", "Little Harbour"="blue3", "Taylor Head"="blue3"))+
-  scale_shape_manual(name="Site", values= c("Moosehead"=20, "Conrod Beach"=17, "Goldboro"=16, "Little Harbour"=20, "Taylor Head"=20))+
+  scale_color_manual(name="Site",values = c("Moosehead"="blue4", "Conrod Beach"="green3", "Goldboro"="green3", "Little Harbour"="blue4", "Taylor Head"="blue4"))+
+  scale_shape_manual(name="Site", values= c("Moosehead"=18, "Conrod Beach"=17, "Goldboro"=16, "Little Harbour"=20, "Taylor Head"=15))+
   #geom_point(data=perley.sites, aes(x=lon, y=lat), shape=21, colour='black', fill="cornflowerblue", size=4)+
   theme_bw()+
   theme(axis.text.y = element_text(colour = "black", size = 14, face = "bold"), 
