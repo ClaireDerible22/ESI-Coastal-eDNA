@@ -149,4 +149,42 @@ ggplot()+
         text=element_text(size=18))
 
 ############################## 2024 Data #####################################
+####COI DATA
 
+#Imported both data sets required (ASV: ESI2024_feature_table_export and taxonomy: rdp.output)
+
+##We're going to skip the filtering by low reads step for now...
+
+###Trying to read in (and rename for R use) 12S Taxonomy and ASV files ##Header = false so that first data column isn't deleted (sep="\t", is used for csv to keep variables from merging into one) - When working with tsv files: we use delim, and "/t" for keeping the values separated properly
+esi24.COI.asv <- read.delim("data/2024/COI/ESI2024_COI_feature_table_export.tsv", header = T, sep="\t")
+esi24.COI.taxa<- read.delim("data/2024/COI/rdp.output", header = F)
+
+
+###MERGE###
+
+esi24.COI.merge <-left_join(esi24.COI.asv,esi24.COI.taxa, by=c("ASV"="V1")) #ASV and V1 are the first column headers of both files
+
+#filter
+esi24.COI.filt.merge <- esi24.COI.merge %>% filter(V14>0.94, V12 %in% c("Arthropoda","Platyhelminthes","Chordata","Annelida","Mollusca","Nematoda","Rhodophyta","Gastrotricha","Chlorophyta","Echinodermata","Brachiopoda","Porifera","Cnidaria","Nemertea","Haptophyta","Hemichordata","Bryozoa","Ctenophora_comb_jellies","Tardigrada","Rotifera", "Chaetognatha")) %>% select(!starts_with(c("ENEG","EXT","PCRB"))) %>%
+  rename(Phylum=V12, Class=V15, Species=V27, Confidence=V29)
+
+####12S DATA
+
+#Imported both data sets required (ASV: ESI12S_feature_table_export and taxonomy: 12Sblast_5results)
+
+##We're going to skip the filtering by low reads step for now...
+
+###Trying to read in (and rename for R use) 12S Taxonomy and ASV files ##Header = false so that first data column isn't deleted (sep="\t", is used for csv to keep variables from merging into one) - When working with tsv files: we use delim, and "/t" for keeping the values separated properly
+esi24.12S.asv <- read.delim("data/2024/MiFishU/ESI12S_feature_table_export.tsv", header = T, sep="\t")
+esi24.12S.taxa<- read.delim("data/2024/MiFishU/12Sblast_5results.tsv", header = F)
+
+
+###MERGE###
+
+esi24.12S.merge <-left_join(esi24.12S.asv,esi24.12S.taxa, by=c("OTU.ID"="V1")) #OTU.ID and V1 are the first column headers of both files
+
+###filter 12S for fish, dolphin, whales, sharks
+
+esi24.12S.filt.merge <- esi24.12S.merge %>% filter(V3>97.99 & V7 %in% c("bony fishes","whales & dolphins","sharks & rays"))
+
+####################### 2025 DATA################################
