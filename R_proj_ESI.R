@@ -187,4 +187,53 @@ esi24.12S.merge <-left_join(esi24.12S.asv,esi24.12S.taxa, by=c("OTU.ID"="V1")) #
 
 esi24.12S.filt.merge <- esi24.12S.merge %>% filter(V3>97.99 & V7 %in% c("bony fishes","whales & dolphins","sharks & rays"))
 
-####################### 2025 DATA################################
+####################### 2025 DATA ################################
+
+####COI DATA
+
+#Imported both data sets required (ASV: ESIseine2025_COI_feature_table_export and taxonomy: COIblast_5results)
+
+##We're going to skip the filtering by low reads step for now...
+
+###Trying to read in (and rename for R use) 12S Taxonomy and ASV files ##Header = false so that first data column isn't deleted (sep="\t", is used for csv to keep variables from merging into one) - When working with tsv files: we use delim, and "/t" for keeping the values separated properly
+esi25.COI.asv <- read.delim("data/2025/COI/ESIseine2025_COI_feature_table_export.tsv", header = T, sep="\t")
+esi25.COI.taxa<- read.delim("data/2025/COI/COIblast_5results.tsv", header = F)
+
+
+###MERGE###
+
+esi25.COI.merge <-left_join(esi25.COI.asv,esi25.COI.taxa, by=c("OTU.ID"="V1")) #OTU.ID and V1 are the first column headers of both files
+
+#filter
+esi25.COI.filt.merge <- esi25.COI.merge %>% filter(V3>97.99 & V5>100 & V7 %in% c("amphipods","anthozoans",
+                                                                        "arthropods","arrow worms","bivalves",
+                                                                        "black corals", "blue corals","brachiopods",
+                                                                        "brittle stars","brown algae","bryozoans",
+                                                                        "carnivores","cephalopods", "chimaeras",
+                                                                        "chitons","cnidarians","ciliates",
+                                                                        "comb jellies", "coral anemones", "crinoids",
+                                                                        "crustaceans","diatoms", "dinoflagelleates",
+                                                                        "echinoderms","flatworms","forams","gastropods",
+                                                                        "golden algae","green algae","hagfishes",
+                                                                        "hemichordates","hydrozoans",
+                                                                        "isopods","jellyfishes",
+                                                                        "lampreys","mat anemones","molluscs","nematodes",
+                                                                        "peanut worms","phoronid worms","ray-finned fishes",
+                                                                        "red algae","ribbon worms","rotifers","sea anemones",
+                                                                        "sea cucumbers","sea pens","sea spiders","sea urchins",
+                                                                        "sea wasps","segmented worms","sharks & rays",
+                                                                        "soft corals","sponges","spoonworms",
+                                                                        "starfish","stony corals","tardigrades","tube anemones",
+                                                                        "tunicates","turtles","tusk shells","whales & dolphins"),
+                                           !V6 %in% c("uncultured diatom",
+                                                      "Pennatula phosphorea",
+                                                      "Chloroparvula pacifica",
+                                                      "Lamellitrochus sp. 5 SW-2025"))
+
+esi25.COI.filt.merge$V6 <- gsub("Sagartiogeton awii", "Anthozoa sp.", esi25.COI.filt.merge$V6)
+esi25.COI.filt.merge$V6 <- gsub("Paragorgia papillata", "Paragorgia sp.", esi25.COI.filt.merge$V6)
+esi25.COI.filt.merge$V6 <- gsub("Pseudocalanus newmani", "Pseudocalanus sp.", esi25.COI.filt.merge$V6)
+esi25.COI.filt.merge$V6 <- gsub("Thysanoessa sp. AB-2009", "Thysanoessa sp.", esi25.COI.filt.merge$V6)
+esi25.COI.filt.merge$V6 <- gsub("Primnoa pacifica", "Primnoa sp.", esi25.COI.filt.merge$V6)    
+
+##### 12S DATA
