@@ -237,3 +237,20 @@ esi25.COI.filt.merge$V6 <- gsub("Thysanoessa sp. AB-2009", "Thysanoessa sp.", es
 esi25.COI.filt.merge$V6 <- gsub("Primnoa pacifica", "Primnoa sp.", esi25.COI.filt.merge$V6)    
 
 ##### 12S DATA
+
+#Imported both data sets required (ASV: ESI2025_12S_feature_table_export and taxonomy:12Sblast_results )
+
+##We're going to skip the filtering by low reads step for now...
+
+###Trying to read in (and rename for R use) 12S Taxonomy and ASV files ##Header = false so that first data column isn't deleted (sep="\t", is used for csv to keep variables from merging into one) - When working with tsv files: we use delim, and "/t" for keeping the values separated properly
+esi25.12S.asv <- read.delim("data/2025/MiFishU/ESI2025_12S_feature_table_export.editedtsv.txt", header = T, sep="\t")
+esi25.12S.taxa<- read.delim("data/2025/MiFishU/12Sblast_results.tsv", header = F)
+
+
+###MERGE###
+
+esi25.12S.merge <-left_join(esi24.12S.asv,esi24.12S.taxa, by=c("OTU.ID"="V1")) #OTU.ID and V1 are the first column headers of both files
+
+###filter 12S for fish, dolphin, whales, sharks
+
+esi25.12S.filt.merge <- esi25.12S.merge %>% filter(V3>97.99 & V7 %in% c("bony fishes","whales & dolphins","sharks & rays"))
