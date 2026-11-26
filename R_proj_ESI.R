@@ -1,8 +1,10 @@
 # Code to merge ASV tables and taxonomy from eDNA data processed in Qiime2, using dada2 and BLAST or RDP Classifier for taxonomy.
 ##Using RDP Classifier for Taxonomy 
+
+
 ###Trying to read in Taxonomy and ASV files
-asv_data <- read.delim("C:/Users/clair/Documents/GitHub/ESI-Coastal-eDNA/data/2023/COI-LERAYXT/ESI2023_featuretable_export.tsv")
-taxrdp <- read.delim("C:/Users/clair/Documents/GitHub/ESI-Coastal-eDNA/data/2023/COI-LERAYXT/rdp.output")
+asv_data <- read.delim("data/2023/COI-LERAYXT/ESI2023_featuretable_export.tsv")
+taxrdp <- read.delim("data/2023/COI-LERAYXT/rdp.output")
 #testing to see if R project is syncing with GitHub by hitting save and then checking desktop GitHub
 
 ###Now we can begin (Working with 2023 ESI Seining COI data)
@@ -29,18 +31,30 @@ filtered_asv_data <- filter_low_reads(asv_data)
 
 
 #Now the 2023 COI seining data (ASV data and rdp.ouput as taxonomy)
+## from Nick - don't need to read in tables since you have these above as asv_data and taxrdp but it's also fine to do
+## Also note, remove "row.names=FALSE" from the below file name you're reading in - everything in between quotes is a string that R reads as a file name :)
 esi23.coi.asv <-read.table("filtered_asv_data.tsv, row.names=FALSE", header = T, sep="\t") %>% glimpse()
-esi23.coi.taxa <-read.table("C:/Users/clair/Documents/GitHub/ESI-Coastal-eDNA/data/2023/COI-LERAYXT/rdp.output", header = F, sep="\t") %>% select(c("V1","V12","V15", "V24","V26","V27","V29"))
+esi23.coi.taxa <-read.table("data/2023/COI-LERAYXT/rdp.output", header = F, sep="\t") %>% select(c("V1","V12","V15", "V24","V26","V27","V29"))
 
 #MERGE
 
 esi23.coi.merge <-left_join(esi23.coi.asv,esi23.coi.taxa, by=c("OTU.ID"="V1"))
 
 #filter
-esi23.coi.filt <- esi23.coi.merge %>% filter(V26>0.94, V12 %in% c("Arthropoda","Platyhelminthes","Chordata","Annelida","Mollusca","Nematoda","Rhodophyta","Gastrotricha","Chlorophyta","Echinodermata","Brachiopoda","Porifera","Cnidaria","Nemertea","Haptophyta","Hemichordata","Bryozoa","Ctenophora_comb_jellies","Tardigrada","Rotifera", "Chaetognatha")) %>% select(!starts_with(c("ENEG","EXT","PCRB"))) %>%
+esi23.coi.filt <- esi23.coi.merge %>% filter(V26>0.94, V12 %in% c("Arthropoda","Platyhelminthes",
+                                                                  "Chordata","Annelida","Mollusca",
+                                                                  "Nematoda","Rhodophyta","Gastrotricha",
+                                                                  "Chlorophyta","Echinodermata","Brachiopoda",
+                                                                  "Porifera","Cnidaria","Nemertea",
+                                                                  "Haptophyta","Hemichordata","Bryozoa",
+                                                                  "Ctenophora_comb_jellies","Tardigrada",
+                                                                  "Rotifera", "Chaetognatha")) %>% 
+  select(!starts_with(c("ENEG","EXT","PCRB"))) %>%
   rename(Phylum=V12, Class=V15, Species=V27, Confidence=V29)
 
-esi23.coi.filt2 <- filter_low_reads(esi23.coi.filt) %>% filter(!Species %in% c("Sus_scrofa","Homo_sapiens")) %>%
+#Don't need to do this a second time since it was done to your raw ASV table
+esi23.coi.filt2 <- filter_low_reads(esi23.coi.filt) %>%
+  filter(!Species %in% c("Sus_scrofa","Homo_sapiens")) %>%
   select(-c(OTU.ID,Phylum,Class,V24,V26)) %>%
   relocate(Species) %>%
   relocate(Confidence, .after=Species)
@@ -72,13 +86,13 @@ esi23.12S.filt.merge <- esi23.12S.merge %>% filter(PercentID>97.99 & V7>97.99 %i
 ################################### MAKING MAP #######################################################
 
 ##USING SCRIPT OUTLINE FROM NICK##
-
+## From Nick - I would make this map script a separate script Claire!
 
 #Make a map of eDNA sites in the ESI
-install.packages("sf")
-install.packages("raster")
-install.packages("ggplot2")
-install.packages("dplyr")
+# install.packages("sf")
+# install.packages("raster")
+# install.packages("ggplot2")
+# install.packages("dplyr")
 library(sf)
 library(raster)
 library(ggplot2)
