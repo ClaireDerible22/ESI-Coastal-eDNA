@@ -89,10 +89,10 @@ esi23.12S.filt.merge <- esi23.12S.merge %>% filter(PercentID>97.99 & V7>97.99 %i
 ## From Nick - I would make this map script a separate script Claire!
 
 #Make a map of eDNA sites in the ESI
-# install.packages("sf")
-# install.packages("raster")
-# install.packages("ggplot2")
-# install.packages("dplyr")
+#install.packages("sf")
+#install.packages("raster")
+#install.packages("ggplot2")
+#install.packages("dplyr")
 library(sf)
 library(raster)
 library(ggplot2)
